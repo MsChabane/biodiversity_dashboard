@@ -181,7 +181,7 @@ app.layout = dmc.MantineProvider(
      ],
     [Input('year_selector', 'value')]
 )
-def render_ndvi(year_selected):
+def render_figures(year_selected):
     year_selected=int(year_selected)
     percent_recent=urban_data[urban_data['Year']==year_selected].Percent.values[0]
     percent_priv=urban_data[urban_data['Year']==year_selected-1].Percent.values[0]
