@@ -197,7 +197,49 @@ def make_indicator(value,delta,title_text,range):
     return fig
 
 
+def generate_urban_rate(urban:pd.DataFrame):
+    fig = go.Figure()
 
+    fig.add_trace(go.Scatter(
+        x=urban['Year'],
+        y=urban['Urban POP'],
 
+        mode='lines+markers',  
+        line=dict(color='#4CAF50', width=3),
+        marker=dict(size=8, color='#4CAF50'),
+        customdata=urban[['Percent']],
+
+        
+        hovertemplate=
+        "<b>Year:</b> %{x}<br>" +
+        "<b>Urban Population:</b> %{y:,}<br>" +
+        "<b>Urban %:</b> %{customdata[0]}%" +
+        "<extra></extra>"
+    ))
+
+    fig.update_layout(
+        template='plotly_white',
+        title="",
+        xaxis_title="",
+        yaxis_title="",
+        
+        xaxis=dict(
+            tickmode='linear',
+            tick0=2022,
+            dtick=1,
+            showgrid=False
+        ),
+
+        
+        yaxis=dict(
+            range=[urban['Urban POP'].min() * 0.998, urban['Urban POP'].max() * 1.0005],
+            showgrid=False
+        ),
+    showlegend=False,
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+    )
+
+    return fig
 
 

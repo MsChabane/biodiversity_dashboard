@@ -146,6 +146,16 @@ app.layout = dmc.MantineProvider(
             )
 
         ], mt=30, px=20)
+        ,dmc.Grid(
+            dmc.GridCol(
+                dmc.Card([
+                    dmc.Text("Urban Population", fw=700, size="lg", c="#4CAF50"),
+                    dmc.Skeleton(dcc.Graph(id='urban_line_fig'),
+                                 id='urban_line_fig_sk', height=500)
+                ], withBorder=True, shadow="md", radius="lg"),
+                span=8,offset=2
+            )
+        )
 
     ],
     defaultColorScheme="light",
@@ -165,7 +175,8 @@ app.layout = dmc.MantineProvider(
     Output('min_ndvi_kpi', 'figure'),
     Output('max_ndvi_kpi', 'figure'),
     Output('avg_ndvi_kpi', 'figure'),
-    Output('urban_kpi', 'figure')
+    Output('urban_kpi', 'figure'),
+    Output('urban_line_fig', 'figure')
 
      ],
     [Input('year_selector', 'value')]
@@ -224,7 +235,7 @@ def render_ndvi(year_selected):
     urban_kpi=utils.make_indicator(percent_recent,percent_priv,"Urban Area Percentage",[0,100])
     
     alg_fig = utils.generate_yearly_ndvi_per_wilaya(t, geo)
-
+    urban_line_fig=utils.generate_urban_rate(urban_data)
 
     return (figure_monthly_tred
             ,figure_dist_map,
@@ -236,7 +247,8 @@ def render_ndvi(year_selected):
               min_ndvi_kpi,
               max_ndvi_kpi,
               avg_ndvi_kpi,
-              urban_kpi
+              urban_kpi,
+              urban_line_fig
               )
 
 @callback(
@@ -313,8 +325,14 @@ Output("urban_kpi_sk",'visible'),
 )
 def l(fig):
     return fig is None or fig == {}
+@callback(
+Output("urban_line_fig_sk",'visible'),
+    Input('urban_line_fig', 'figure')
+)
+def z(fig):
+    return fig is None or fig == {}
 
    
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False,port=8050,host='0.0.0.0')
